@@ -36,37 +36,39 @@ if [[ $? = 0 ]]; then
 
     for i in *.csv
     do
-    echo "    Processando $i"
+        echo "    Processando $i"
 
-    sed -i -e '/Total/d' $i
+        sed -i -e '/Total/d' $i
 
-    awk '
-    BEGIN {FS=OFS=","}
-    NF--' $i > temp
-    #mv temp $i
+        sed -i -e 's/NAO\-ME\-TOQUE/NAO ME TOQUE/' $i
 
-    awk '
+        awk '
+        BEGIN {FS=OFS=","}
+        NF--' $i > temp
+        #mv temp $i
 
-    {
-        if (match($0, /\-[^0-9]/))
+        awk '
+
         {
-            split($0,a,"-");
-            print a[1] " " a[2] "-" a[3];
-        } else
-            print $0;
-    }' temp > $i
+            if (match($0, /\-[^0-9]/))
+            {
+                split($0,a,"-");
+                print a[1] " " a[2] "-" a[3];
+            } else
+                print $0;
+        }' temp > $i
 
 
-    sed -i -e 's/\-/\,/' $i
-    sed -i -e s/"'"/" "/g $i
+        sed -i -e 's/\-/\,/' $i
+        sed -i -e s/"'"/" "/g $i
 
-    x=$(echo ${i%%.*} | cut -c19-20)
-    awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$x $i > temp
-    mv temp $i
+        x=$(echo ${i%%.*} | cut -c19-20)
+        awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$x $i > temp
+        mv temp $i
 
-    data=$(sed -n 1p data_ref.txt)
-    awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$data $i > temp
-    mv temp $i
+        data=$(sed -n 1p data_ref.txt)
+        awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$data $i > temp
+        mv temp $i
 
     done
 
@@ -88,4 +90,4 @@ fi
 
 END=$(date +%s)
 DIFF=$(( $END - $START ))
-echo "Tempo de Execucao: $DIFF minutos." >> LOG_${DATA}.txt
+echo "Tempo de Execucao: $DIFF segundos." >> LOG_${DATA}.txt
