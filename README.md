@@ -1,7 +1,7 @@
 Web scraping and data manipulation with Python, Shell Scripting, Selenium and Pandas
 
-O projeto tem por objetivo extrair dados de numeros de empresas por UF, CNAE (atividade economica) e cidade, do site Estatisticas SINAC, realizar tratamento nos dados e inseri-los em banco de dados.
+O projeto tem por objetivo extrair dados de números de empresas por UF, CNAE (atividade econômica) e cidade, do site Estatísticas SINAC, realizar tratamento nos dados e inserí-los em banco de dados.
 
-O arquivo que deve ser executado tem por nome robo_SINAC.sh (LINUX). Esse arquivo aciona o arquivo download_SINAC.py, responsavel pelo web scraping (utilizando Python e a biblioteca Selenium), em seguida realiza tratamento nos arquivos CSV baixados, para entao chamar outro arquivo (readSINAC_insertDB.py) que, com a utilizacao de Pandas, faz a leitura do arquivo consolidado e inseri os dados em um banco de dados PostgreSQL.
+O arquivo que deve ser executado tem por nome SINAC.sh (shell script). Esse arquivo aciona o código download_SINAC.py, responsável pelo web scraping (utilizando Python e a biblioteca Selenium), em seguida realiza tratamento nos arquivos CSV baixados, para então chamar o código insert_SINAC.py, que, com a utilizacao de Pandas, faz a leitura do arquivo consolidado e insere os dados em um banco de dados PostgreSQL.
 
-Este projeto ainda nao esta finalizado ate a data de 03/11/2017.
+Esta versão é a beta do projeto, com data de 07/11/2017.
