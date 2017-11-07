@@ -24,8 +24,12 @@ driver = webdriver.Firefox(firefox_binary=binary, firefox_profile=profile)
 # Abre a página
 driver.get('http://www8.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATBHE/estatisticasSinac.app/Default.aspx')
 
-# Procura o elemento na página com esse ID e clica
-driver.find_element_by_id('ctl00_ctl00_Conteudo_AntesTabela_lnkOptantesPorCNAE').click()
+# Identifica se o processamento será de MPE ou de MEI e clica no respectivo link
+# Os demais passos são identicos para ambos
+if sys.argv[1]=='MPE':
+    driver.find_element_by_id('ctl00_ctl00_Conteudo_AntesTabela_lnkOptantesPorCNAE').click()
+elif sys.argv[1]=='MEI':
+    driver.find_element_by_id('ctl00_ctl00_Conteudo_AntesTabela_lnkEstatisticasOptantesPorCNAEMeiTotal').click()
 
 # Identifica menu dropdown e escolhe a opção "Município"
 Select(driver.find_element_by_id("ctl00_ctl00_Conteudo_AntesTabela_ddlColuna")).select_by_visible_text("Município")
