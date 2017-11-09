@@ -2,7 +2,8 @@
 
 O projeto tem por objetivo extrair dados de números de empresas por UF, CNAE (atividade econômica) e cidade, do site Estatísticas SINAC, realizar tratamento nos dados e inserí-los em banco de dados.
 
-ETAPAS:
+
+## ETAPAS:
 
 1 - Rodar o script SINAC.sh, que é o executor do web scraping e responsável por acionar os códigos Python
 
