@@ -78,13 +78,13 @@ if [[ $? = 0 ]]; then
     DATA=$(date +%Y%m%d)
     cat *.csv >> EstatisticasSinacFinal.txt
     rm *.csv
-    rm data_ref.txt
+#    rm data_ref.txt
 
 else
     echo "Deu erro no download/montagem do arquivo MPE!"
 fi
 
-python3 insert_SINAC.py
+python3 insert_SINAC.py "MPE"
 if  [[ $? = 0 ]]; then
     echo "MPE - Carregou no banco"
     rm EstatisticasSinacFinal.txt
@@ -170,13 +170,13 @@ if [[ $? = 0 ]]; then
     DATA=$(date +%Y%m%d)
     cat *.csv >> EstatisticasSinacMEIFinal.txt
     rm *.csv
-    rm data_ref.txt
+#    rm data_ref.txt
 
 else
     echo "Deu erro no download/montagem do arquivo MEI!"
 fi
 
-python3 insert_SINAC.py
+python3 insert_SINAC.py "MEI"
 if  [[ $? = 0 ]]; then
     echo "MEI - Carregou no banco"
     rm EstatisticasSinacMEIFinal.txt
@@ -185,6 +185,13 @@ else
     echo "MEI - Deu erro na insercao no banco! Erro: $?"
 fi
 
+
+python3 subtrai_MEI.py
+if  [[ $? = 0 ]]; then
+    echo "MPE = ME e EPP apenas."
+else
+    echo "Deu erro na subtração! Erro: $?"
+fi
 
 END=$(date +%s)
 DIFF=$(( $END - $START ))

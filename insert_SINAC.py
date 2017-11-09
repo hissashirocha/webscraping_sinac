@@ -1,18 +1,20 @@
+import sys
 import pandas as pd
 import psycopg2
 import os.path as path
 
-# Lendo os arquivos csv
-if path.isfile('EstatisticasSinacFinal.txt'):
-    dados = pd.read_csv('EstatisticasSinacFinal.txt', header=None)
-else:
-    dados = pd.read_csv('EstatisticasSinacMEIFinal.txt', header=None)
-
-# Conexão com o banco de dados
-conn = psycopg2.connect("dbname=SINAC user=postgres password=1520")
-cursor = conn.cursor()
-
 try:
+    # Lendo os arquivos csv
+    if sys.argv[1]=='MPE':
+        dados = pd.read_csv('EstatisticasSinacFinal.txt', header=None)
+    elif sys.argv[1]=='MEI':
+        dados = pd.read_csv('EstatisticasSinacMEIFinal.txt', header=None)
+
+    # Conexão com o banco de dados
+    conn = psycopg2.connect("dbname=SINAC user=postgres password=1520")
+    cursor = conn.cursor()
+
+
 
     # Loop que varia de 1 até o tamanho do DataFrame "dados"
     for i in range(1,len(dados)):
