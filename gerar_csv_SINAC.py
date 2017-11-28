@@ -7,6 +7,8 @@ cursor = conn.cursor()
 cursor.execute("SELECT data, uf, mun, porte, cnae, qtde FROM estatisticas_sinac;")
 
 dados = pd.DataFrame(cursor.fetchall())
+
+#Cria o arquivo sinac.csv
 dados.to_csv('sinac.csv')
 
 cursor.close()
