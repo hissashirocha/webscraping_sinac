@@ -2,10 +2,11 @@
 
 START=$(date +%s)
 
+#Capturando valores de MPE no Estatística SINAC
 python3 download_SINAC.py "MPE"
 if [[ $? = 0 ]]; then
 
-
+    #Renomea os arquivos, acrescentando os UF
     rename 's/inac/inac-AC/' 'EstatisticasSinac.csv'
     rename 's/\(1\)/-AL/' 'EstatisticasSinac(1).csv'
     rename 's/\(2\)/-AM/' 'EstatisticasSinac(2).csv'
@@ -34,19 +35,24 @@ if [[ $? = 0 ]]; then
     rename 's/\(25\)/-SP/' 'EstatisticasSinac(25).csv'
     rename 's/\(26\)/-TO/' 'EstatisticasSinac(26).csv'
 
+    #Para cada arquivo
     for i in *.csv
     do
         echo "    Processando MPE $i"
 
+        #Retira a linha "Total"
         sed -i -e '/Total/d' $i
 
+        #Altera o município "Não-Me-Toque" para "Não me Toque"
         sed -i -e 's/NAO\-ME\-TOQUE/NAO ME TOQUE/' $i
 
+        #Retira a última vírgula
         awk '
         BEGIN {FS=OFS=","}
         NF--' $i > temp
         #mv temp $i
 
+        #Trata munícipios que tem hífem, retirando e substituindo por espaço
         awk '
 
         {
@@ -58,32 +64,40 @@ if [[ $? = 0 ]]; then
                 print $0;
         }' temp > $i
 
-
+        #Substitui os hífens por vírgula (para separar os munícipios do número CNAE com vírgula)
         sed -i -e 's/\-/\,/' $i
+
+        #Retira aspas simples e substitui por espaço
         sed -i -e s/"'"/" "/g $i
 
+        #Extrai o UF do nome do arquivo (na posição 19 e 20)
         x=$(echo ${i%%.*} | cut -c19-20)
+        #Insere o UF na primeira coluna
         awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$x $i > temp
         mv temp $i
 
+        #Recupera a data de referência da captura e insere na primeira coluna
         data=$(sed -n 1p data_ref.txt)
         awk -F ',' '{$1=val FS $1;}1' OFS=',' val=$data $i > temp
         mv temp $i
 
+        #Insere "MPE" na primeira coluna
         awk -F ',' '{$1=val FS $1;}1' OFS=',' val='MPE' $i > temp
         mv temp $i
 
     done
 
     DATA=$(date +%Y%m%d)
+    #Lê todos os arquivos csv e salva no arquivo txt
     cat *.csv >> EstatisticasSinacFinal.txt
     rm *.csv
-#    rm data_ref.txt
+    #    rm data_ref.txt
 
 else
     echo "Deu erro no download/montagem do arquivo MPE!"
 fi
 
+#Insere os dados de MPE no banco
 python3 insert_SINAC.py "MPE"
 if  [[ $? = 0 ]]; then
     echo "MPE - Carregou no banco"
@@ -193,6 +207,7 @@ else
     echo "Deu erro na subtração! Erro: $?"
 fi
 
+#Salva o tempo em segundos que levou para a execução
 END=$(date +%s)
 DIFF=$(( $END - $START ))
 echo "Tempo de Execucao: $DIFF segundos." >> LOG_${DATA}.txt
