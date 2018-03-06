@@ -78,9 +78,10 @@ try:
     fo = open("/home/hissashi/Desktop/Python3/WS_SINAC/data_ref.txt", "w")
     fo.write(data)
     print("escreveu a data no arquivo")
-    fo.close()
+    # fo.close()
 
 except Exception as e:
     print(e)
 finally:
+    fo.close()
     driver.quit()

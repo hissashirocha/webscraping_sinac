@@ -203,6 +203,7 @@ fi
 python3 subtrai_MEI.py
 if  [[ $? = 0 ]]; then
     echo "MPE = ME e EPP apenas."
+    rm data_ref.txt
 else
     echo "Deu erro na subtração! Erro: $?"
 fi

@@ -7,8 +7,10 @@ try:
     # Lendo os arquivos csv
     if sys.argv[1]=='MPE':
         dados = pd.read_csv('EstatisticasSinacFinal.txt', header=None)
+        print("inserindo MPE")
     elif sys.argv[1]=='MEI':
         dados = pd.read_csv('EstatisticasSinacMEIFinal.txt', header=None)
+        print("inserindo MEI")
 
     # Conexão com o banco de dados
     conn = psycopg2.connect("dbname=SINAC user=postgres password=1520")
